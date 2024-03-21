@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
 
     public GameObject gameplayUI;
     public GameObject gameOverScreen;
+    public Animator animator;
 
     private float _maxValue;
 
@@ -16,6 +17,11 @@ public class PlayerHealth : MonoBehaviour
     {
         _maxValue = value;
         DrawHealthBar();
+    }
+
+    public bool IsAlive()
+    {
+        return value > 0;
     }
 
     public void DealDamage(float damage)
@@ -28,13 +34,22 @@ public class PlayerHealth : MonoBehaviour
         DrawHealthBar();
     }
 
+    public void AddHealth(float amount)
+    {
+        value += amount;
+        value = Mathf.Clamp(value, 0, _maxValue);
+        DrawHealthBar();
+    }
+
     private void PlayerIsDead()
     {
         gameplayUI.SetActive(false);
         gameOverScreen.SetActive(true);
+        gameOverScreen.GetComponent<Animator>().SetTrigger("show");
         GetComponent<PlayerController>().enabled = false;
         GetComponent<FireballCaster>().enabled = false;
         GetComponent<CameraRotation>().enabled = false;
+        animator.SetTrigger("death");
     }
 
     private void DrawHealthBar()
