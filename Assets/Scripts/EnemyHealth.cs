@@ -8,7 +8,14 @@ public class EnemyHealth : MonoBehaviour
     public float value = 100;
     public Animator animator;
 
+    public PlayerProgress playerProgress;
+
     public Explosion explosionPrefab;
+
+    private void Start()
+    {
+        playerProgress = FindObjectOfType<PlayerProgress>();
+    }
 
     public bool IsAlive()
     {
@@ -17,6 +24,8 @@ public class EnemyHealth : MonoBehaviour
 
     public void DealDamage(float damage)
     {
+        playerProgress.AddExperience(damage);
+
         value -= damage;
         if (value <= 0)
         {
